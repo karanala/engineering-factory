@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: example-service
+  labels:
+    engineering-factory/change-id: CHG-2026-000184
+spec:
+  replicas: 6
+  strategy:
+    canary:
+      steps:
+        - setWeight: 1
+        - pause: {duration: 5m}
+        - setWeight: 10
+        - pause: {duration: 10m}
+        - setWeight: 50
+        - pause: {duration: 15m}
+      analysis:
+        templates:
+          - templateName: error-budget-and-latency
+  selector:
+    matchLabels: {app: example-service}
+  template:
+    metadata:
+      labels: {app: example-service}
+    spec:
+      containers:
+        - name: application
+          image: registry.example.com/example-service@sha256:REPLACE_WITH_SIGNED_DIGEST
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true

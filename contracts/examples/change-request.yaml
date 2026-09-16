@@ -1,0 +1,14 @@
+id: CHG-2026-000184
+business_goal: Reduce checkout abandonment without weakening payment security.
+services: [checkout-api, payments-ui]
+risk: high
+data_classification: pci
+acceptance_tests:
+  - Card payment succeeds under two seconds at p95.
+  - No PCI data is present in application logs.
+required_approvals: [product_owner, security, service_owner]
+definition_of_done:
+  - Contract, integration, accessibility, and security tests pass.
+  - SBOM and provenance are attached to the release candidate.
+  - Staging soak and progressive rollout policies pass.
+policy_version: release/v1

@@ -1,0 +1,34 @@
+name: Validate generated change
+
+on:
+  push:
+    branches: [main, 'factory/**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install --ignore-scripts
+      - run: npm test
+      - name: Report verified pipeline evidence
+        if: always() && env.CONTROL_PLANE_URL != ''
+        env:
+          CONTROL_PLANE_URL: ${{ secrets.CONTROL_PLANE_URL }}
+          CONTROL_PLANE_TOKEN: ${{ secrets.CONTROL_PLANE_TOKEN }}
+        run: |
+          curl --fail-with-body --request POST "$CONTROL_PLANE_URL/api/integrations/github/events" \
+            --header "Authorization: Bearer $CONTROL_PLANE_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data '{"provider":"github","run_id":"${{ github.run_id }}","sha":"${{ github.sha }}","repository":"${{ github.repository }}","conclusion":"${{ job.status }}","evidence_uri":"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}'

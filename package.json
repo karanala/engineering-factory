@@ -1,0 +1,12 @@
+{
+  "name": "engineering-factory-control-plane",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Policy-governed autonomous engineering factory control plane",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "test": "node --test"
+  },
+  "engines": {"node": ">=20"}
+}

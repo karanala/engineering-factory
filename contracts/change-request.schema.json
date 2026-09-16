@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-factory.example/contracts/change-request/v1",
+  "title": "ChangeRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "business_goal", "services", "risk", "data_classification", "acceptance_tests", "required_approvals", "definition_of_done"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^CHG-[0-9]{4}-[0-9]{6}$"},
+    "business_goal": {"type": "string", "minLength": 10},
+    "services": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "risk": {"enum": ["low", "medium", "high", "critical"]},
+    "data_classification": {"enum": ["public", "internal", "confidential", "pii", "pci", "phi"]},
+    "acceptance_tests": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "required_approvals": {"type": "array", "items": {"enum": ["product_owner", "service_owner", "security", "compliance", "release_manager"]}, "uniqueItems": true},
+    "definition_of_done": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "references": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "policy_version": {"type": "string"},
+    "repository": {"type": "object", "additionalProperties": false, "required": ["gitlab_project_id", "default_branch"], "properties": {"gitlab_project_id": {"type": "string", "minLength": 1}, "default_branch": {"type": "string", "minLength": 1}, "github_mirror": {"type": "string", "pattern": "^[^/]+/[^/]+$"}}}
+  }
+}

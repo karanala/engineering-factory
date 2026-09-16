@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://engineering-factory.example/contracts/action-event/v1",
+  "title": "ActionEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "change_id", "trace_id", "actor", "action", "input_digest", "result", "evidence_uri", "timestamp"],
+  "properties": {
+    "event_id": {"type": "string", "format": "uuid"},
+    "change_id": {"type": "string", "pattern": "^CHG-[0-9]{4}-[0-9]{6}$"},
+    "trace_id": {"type": "string"},
+    "actor": {"type": "object", "required": ["id", "type", "role"], "properties": {"id": {"type": "string"}, "type": {"enum": ["agent", "human", "service"]}, "role": {"type": "string"}}},
+    "action": {"type": "string"},
+    "input_digest": {"type": "string", "pattern": "^sha256:"},
+    "result": {"enum": ["passed", "failed", "denied", "proposed", "approved"]},
+    "evidence_uri": {"type": "string", "format": "uri"},
+    "timestamp": {"type": "string", "format": "date-time"}
+  }
+}

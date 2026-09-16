@@ -1,0 +1,13 @@
+{
+  "project": "engineering-factory",
+  "source_of_truth": {
+    "provider": "gitlab",
+    "project_id": "REPLACE_WITH_GITLAB_PROJECT_ID",
+    "default_branch": "main"
+  },
+  "ci_mirror": {
+    "provider": "github",
+    "repository": "karanala/engineering-factory",
+    "workflow": ".github/workflows/validate-generated-change.yml"
+  }
+}
